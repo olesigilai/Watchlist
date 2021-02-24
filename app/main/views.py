@@ -3,13 +3,14 @@ from . import main
 from ..request import get_movies,get_movie,search_movie
 from .forms import ReviewForm
 from ..models import Review
+from flask_login import login_required
 
 Review=Review
 
 
 
 # Views
-@main.route('/')
+@main.route('/',methods=['post','get'])
 def index():
 
     '''
@@ -23,7 +24,9 @@ def index():
 
     title = 'Home - Welcome to The best Movie Review Website Online'
 
-    search_movie = request.args.get('movie_query')
+    # import pdb;pdb.set_trace()
+
+    search_movie = request.form.get('movie_query')
 
     if search_movie:
         return redirect(url_for('.search',movie_name=search_movie))
@@ -58,6 +61,7 @@ def search(movie_name):
 
 
 @main.route('/movie/review/new/<int:id>', methods = ['GET','POST'])
+@login_required
 def new_review(id):
 
     form = ReviewForm()
